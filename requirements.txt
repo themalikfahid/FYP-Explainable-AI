@@ -1,0 +1,21 @@
+# Runtime dependencies (exact versions used to train the shipped models and run the test suite).
+# Python 3.11 - 3.13. The saved models require this exact scikit-learn version;
+# with any other version the API refuses to load them and asks you to retrain (python -m ml.train).
+fastapi==0.143.1
+uvicorn[standard]==0.54.0
+starlette==1.8.0
+SQLAlchemy==2.1.4
+pydantic==2.14.1
+pydantic-settings==2.16.0
+email-validator==2.3.0
+bcrypt==5.0.0
+PyJWT==2.15.1
+reportlab==5.0.1
+scikit-learn==1.9.1
+scipy==1.18.1
+numpy==2.5.4
+pandas==3.0.6
+joblib==1.6.0
+shap==0.53.0
+matplotlib==3.11.2
+openpyxl==3.1.5

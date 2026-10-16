@@ -1,0 +1,406 @@
+{
+  "id": 1,
+  "disease": "heart",
+  "created_at": "2026-10-15T11:12:16.985027",
+  "inputs": {
+    "age": 63.0,
+    "sex": 1,
+    "cp": 4,
+    "trestbps": 150.0,
+    "chol": 280.0,
+    "fbs": 1,
+    "restecg": 2,
+    "thalach": 105.0,
+    "exang": 1,
+    "oldpeak": 3.0,
+    "slope": 2,
+    "ca": 3,
+    "thal": 7
+  },
+  "lifestyle": {
+    "height_cm": 170.0,
+    "weight_kg": 85.0,
+    "sleep_hours": 6.0,
+    "activity_minutes_week": 60.0,
+    "fruit_veg_servings_day": 2.0,
+    "smoking": "current",
+    "alcohol_units_week": 0.0,
+    "asian_bmi_cutoffs": false
+  },
+  "predicted_class": 3,
+  "risk_score": 0.9928026405126308,
+  "risk_level": "high",
+  "result": {
+    "task": "heart",
+    "predicted_class": 3,
+    "predicted_label": "Disease grade 3",
+    "probabilities": {
+      "0": 0.007197359487369253,
+      "1": 0.11799060569669902,
+      "2": 0.11303863556644106,
+      "3": 0.44857679496077324,
+      "4": 0.31319660428871743
+    },
+    "risk_score": 0.9928026405126308,
+    "risk_score_definition": "estimated probability of any heart disease grade (1-4)",
+    "risk_level": "high",
+    "risk_thresholds": {
+      "low_below": 0.3,
+      "high_at_or_above": 0.7
+    },
+    "components": {
+      "random_forest": {
+        "0": 0.015902901322900443,
+        "1": 0.08273700280282005,
+        "2": 0.1875463629466258,
+        "3": 0.2880581617782728,
+        "4": 0.425755571149381
+      },
+      "ann": {
+        "0": 0.003466412986427315,
+        "1": 0.1330992926512186,
+        "2": 0.08110675240350475,
+        "3": 0.5173704948961306,
+        "4": 0.2649570470627187
+      },
+      "max_disagreement": 0.22931233311785781
+    },
+    "probability_note": "Probabilities are model estimates from the hybrid RF + ANN ensemble. They were checked for calibration on a small held-out test set only (see Model information) and are not clinically validated risks.",
+    "warnings": [
+      "No disease grade is clearly favoured (top probability 45%); treat the grade as uncertain and focus on the overall disease probability."
+    ],
+    "model": {
+      "version": "heart-hybrid-2026-10-15T10:49:54+00:00",
+      "production_model": "Hybrid RF + ANN (weighted soft voting, RF 0.3 / ANN 0.7)",
+      "test_metrics": {
+        "accuracy": 0.5271739130434783,
+        "f1_macro": 0.38451931587089844,
+        "roc_auc_ovr_macro": 0.7676491706417625,
+        "any_disease_roc_auc": 0.8999282639885222,
+        "brier": 0.5797323185451277,
+        "ece_top_label": 0.08962730577972067,
+        "n_test": 184
+      }
+    },
+    "explanation": {
+      "method": "SHAP PermutationExplainer on the full stacked RF+ANN pipeline (probability units)",
+      "explained_class": 3,
+      "base_value": 0.1420328997190041,
+      "predicted_probability": 0.44857679496077324,
+      "contributions": [
+        {
+          "feature": "ca",
+          "value": 3.0,
+          "shap": 0.21401420158899573
+        },
+        {
+          "feature": "oldpeak",
+          "value": 3.0,
+          "shap": 0.11797769740172107
+        },
+        {
+          "feature": "age",
+          "value": 63.0,
+          "shap": -0.04991052898182312
+        },
+        {
+          "feature": "exang",
+          "value": 1.0,
+          "shap": 0.047155378071761886
+        },
+        {
+          "feature": "chol",
+          "value": 280.0,
+          "shap": -0.02583363861465654
+        },
+        {
+          "feature": "restecg",
+          "value": 2.0,
+          "shap": -0.02451172089181837
+        },
+        {
+          "feature": "sex",
+          "value": 1.0,
+          "shap": 0.018385291868058797
+        },
+        {
+          "feature": "thal",
+          "value": 7.0,
+          "shap": 0.012830082969133011
+        },
+        {
+          "feature": "trestbps",
+          "value": 150.0,
+          "shap": 0.009016235565510447
+        },
+        {
+          "feature": "thalach",
+          "value": 105.0,
+          "shap": -0.006456545071300226
+        },
+        {
+          "feature": "cp",
+          "value": 4.0,
+          "shap": -0.005214910332487844
+        },
+        {
+          "feature": "slope",
+          "value": 2.0,
+          "shap": -0.0049110784654591896
+        },
+        {
+          "feature": "fbs",
+          "value": 1.0,
+          "shap": 0.004003430134133433
+        }
+      ],
+      "per_class": {
+        "0": {
+          "base_value": 0.4839519025406239,
+          "shap": {
+            "age": -0.016980448333935548,
+            "sex": -0.01872226323607725,
+            "cp": -0.08121716372384043,
+            "trestbps": -0.02184396359371843,
+            "chol": -0.014037834716873948,
+            "fbs": 0.011471334264622681,
+            "restecg": 0.01792880909886916,
+            "thalach": -0.03100678065524202,
+            "exang": -0.03744256706857876,
+            "oldpeak": -0.07050056999000073,
+            "slope": -0.0019143813573396999,
+            "ca": -0.18269986693876644,
+            "thal": -0.02978884680237323
+          }
+        },
+        "1": {
+          "base_value": 0.16941021275592033,
+          "shap": {
+            "age": 0.016645348730673748,
+            "sex": -0.003463192353126701,
+            "cp": -0.005504513509693162,
+            "trestbps": -0.06640850158144043,
+            "chol": 0.023311958393373848,
+            "fbs": 0.005653164697692918,
+            "restecg": 0.007462125601841341,
+            "thalach": 0.027078510377451088,
+            "exang": -0.018156552461496698,
+            "oldpeak": -0.10481083206893363,
+            "slope": -0.0027741319548455637,
+            "ca": 0.05565677840061214,
+            "thal": 0.013890230668669618
+          }
+        },
+        "2": {
+          "base_value": 0.1331286939747567,
+          "shap": {
+            "age": 0.022024086657765195,
+            "sex": 0.008573782825097086,
+            "cp": 0.039438375134124716,
+            "trestbps": 0.010523860396645405,
+            "chol": 0.010719430135400016,
+            "fbs": -0.026177727410374236,
+            "restecg": -0.03965611745591084,
+            "thalach": -0.010354119575249381,
+            "exang": 0.003923353556708373,
+            "oldpeak": 0.029780382859039677,
+            "slope": 0.002330269447563266,
+            "ca": -0.07291829992954274,
+            "thal": 0.001702664950417821
+          }
+        },
+        "3": {
+          "base_value": 0.1420328997190041,
+          "shap": {
+            "age": -0.04991052898182312,
+            "sex": 0.018385291868058797,
+            "cp": -0.005214910332487844,
+            "trestbps": 0.009016235565510447,
+            "chol": -0.02583363861465654,
+            "fbs": 0.004003430134133433,
+            "restecg": -0.02451172089181837,
+            "thalach": -0.006456545071300226,
+            "exang": 0.047155378071761886,
+            "oldpeak": 0.11797769740172107,
+            "slope": -0.0049110784654591896,
+            "ca": 0.21401420158899573,
+            "thal": 0.012830082969133011
+          }
+        },
+        "4": {
+          "base_value": 0.07147629100969484,
+          "shap": {
+            "age": 0.028221541927319616,
+            "sex": -0.004773619103952003,
+            "cp": 0.05249821243189666,
+            "trestbps": 0.06871236921300304,
+            "chol": 0.005840084802756598,
+            "fbs": 0.005049798313925228,
+            "restecg": 0.03877690364701873,
+            "thalach": 0.020738934924340525,
+            "exang": 0.00452038790160504,
+            "oldpeak": 0.02755332179817348,
+            "slope": 0.007269322330081178,
+            "ca": -0.014052813121298769,
+            "thal": 0.0013658682141527185
+          }
+        }
+      },
+      "additivity_error": 5.551115123125783e-17,
+      "summary": [
+        "Major vessels coloured by fluoroscopy = 3 raised the estimated probability of 'Disease grade 3' by 21.4 percentage points.",
+        "ST depression induced by exercise (oldpeak) = 3 mm raised the estimated probability of 'Disease grade 3' by 11.8 percentage points.",
+        "Age = 63 years lowered the estimated probability of 'Disease grade 3' by 5.0 percentage points."
+      ],
+      "any_disease": {
+        "base_value": 0.5160480974593761,
+        "shap": {
+          "age": 0.016980448333935548,
+          "sex": 0.01872226323607725,
+          "cp": 0.08121716372384043,
+          "trestbps": 0.02184396359371843,
+          "chol": 0.014037834716873948,
+          "fbs": -0.011471334264622681,
+          "restecg": -0.01792880909886916,
+          "thalach": 0.03100678065524202,
+          "exang": 0.03744256706857876,
+          "oldpeak": 0.07050056999000073,
+          "slope": 0.0019143813573396999,
+          "ca": 0.18269986693876644,
+          "thal": 0.02978884680237323
+        }
+      }
+    },
+    "recommendations": {
+      "items": [
+        {
+          "category": "follow_up",
+          "priority": "high",
+          "text": "Arrange a review with a doctor or cardiologist soon and bring this report. The model estimates a high probability of heart disease, which needs clinical assessment.",
+          "rule": "risk_level == high",
+          "source": "ACC/AHA Guideline on the Primary Prevention of Cardiovascular Disease (2019)"
+        },
+        {
+          "category": "risk_mitigation",
+          "priority": "high",
+          "text": "Chest pain that comes on at rest, lasts more than a few minutes, or comes with breathlessness, sweating or nausea is an emergency: call emergency services immediately.",
+          "rule": "cp in (typical, atypical angina) OR exang == yes",
+          "source": "American Heart Association, Warning Signs of a Heart Attack"
+        },
+        {
+          "category": "risk_mitigation",
+          "priority": "high",
+          "text": "Stopping smoking is one of the most effective ways to lower heart and diabetes complications risk. Ask a doctor or a quit-line about support.",
+          "rule": "smoking == current",
+          "source": "WHO tobacco cessation guidance"
+        },
+        {
+          "category": "risk_mitigation",
+          "priority": "medium",
+          "text": "Your resting systolic blood pressure (150 mm Hg) is at or above 130. Have it re-measured on separate days; reducing salt, staying active and limiting alcohol help.",
+          "rule": "trestbps >= 130",
+          "source": "ACC/AHA High Blood Pressure Guideline (2017)"
+        },
+        {
+          "category": "follow_up",
+          "priority": "medium",
+          "text": "Your cholesterol (280 mg/dL) is in the 'high' range (>= 240). Ask for a full lipid profile and advice from a doctor.",
+          "rule": "chol >= 240",
+          "source": "NCEP ATP III cholesterol classification"
+        },
+        {
+          "category": "follow_up",
+          "priority": "medium",
+          "text": "A fasting blood sugar above 120 mg/dL should be followed up with a doctor.",
+          "rule": "fbs == 1",
+          "source": "American Diabetes Association, Standards of Care in Diabetes (diagnosis section)"
+        },
+        {
+          "category": "diet",
+          "priority": "medium",
+          "text": "Eat less salt (under 5 g a day), fewer saturated and trans fats, and more vegetables, fruit, whole grains and pulses.",
+          "rule": "heart task (always)",
+          "source": "WHO Healthy diet fact sheet (2020)"
+        },
+        {
+          "category": "activity",
+          "priority": "medium",
+          "text": "You reported 60 minutes of activity per week. Build up gradually towards at least 150 minutes of moderate activity (such as brisk walking), plus muscle-strengthening on 2 days.",
+          "rule": "activity_minutes_week < 150",
+          "source": "WHO guidelines on physical activity and sedentary behaviour (2020)"
+        },
+        {
+          "category": "sleep",
+          "priority": "medium",
+          "text": "You reported 6 hours of sleep. Aim for at least 7 hours with a regular sleep and wake time, and limit screens and caffeine late in the day.",
+          "rule": "sleep_hours < 7",
+          "source": "AASM/SRS consensus statement on adult sleep duration (Watson et al., 2015)"
+        },
+        {
+          "category": "diet",
+          "priority": "medium",
+          "text": "Add fruit or vegetables to each meal to reach about 5 servings (400 g) a day.",
+          "rule": "fruit_veg_servings_day < 5",
+          "source": "WHO Healthy diet fact sheet (2020)"
+        },
+        {
+          "category": "diet",
+          "priority": "medium",
+          "text": "Your BMI is 29.4 (Overweight). A healthy weight range for your height is about 53.5-72.0 kg. BMI is only a rough guide; discuss weight goals with a professional.",
+          "rule": "BMI outside healthy range",
+          "source": "WHO BMI classification / WHO Expert Consultation on Asian BMI (2004)"
+        }
+      ],
+      "lifestyle_score": {
+        "score": 40,
+        "band": "Needs improvement",
+        "components": {
+          "physical_activity": {
+            "points": 7,
+            "max": 25,
+            "input": 60.0
+          },
+          "sleep": {
+            "points": 12,
+            "max": 20,
+            "input": 6.0
+          },
+          "diet_fruit_veg": {
+            "points": 6,
+            "max": 20,
+            "input": 2.0
+          },
+          "smoking": {
+            "points": 0,
+            "max": 20,
+            "input": "current"
+          },
+          "alcohol": {
+            "points": 15,
+            "max": 15,
+            "input": 0.0
+          }
+        },
+        "note": "Educational score based on public-health guidelines. It is not a validated clinical risk score and is not used by the machine-learning models."
+      },
+      "bmi": {
+        "bmi": 29.4,
+        "category": "Overweight",
+        "cutoffs": "WHO adult (18.5 / 25 / 30)",
+        "healthy_weight_range_kg": [
+          53.5,
+          72.0
+        ],
+        "note": "BMI is a screening measure for adults. It does not measure body fat directly or account for muscle mass, age, sex or ethnicity, and is not a complete health assessment."
+      },
+      "top_risk_factors": [
+        "ca",
+        "oldpeak",
+        "exang"
+      ],
+      "disclaimer": "This application is an educational screening and decision-support prototype. It does not provide a diagnosis and is not a substitute for evaluation by a qualified health professional. If you feel unwell or have urgent symptoms, contact a doctor or emergency services."
+    }
+  },
+  "model_version": "heart-hybrid-2026-10-15T10:49:54+00:00",
+  "alert_status": null
+}

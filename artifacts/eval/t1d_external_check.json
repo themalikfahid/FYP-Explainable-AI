@@ -1,0 +1,94 @@
+{
+  "n": 85,
+  "cohort_symptom_prevalence": {
+    "polyuria": 0.417,
+    "polydipsia": 0.565,
+    "sudden_weight_loss": 0.224,
+    "visual_blurring": 0.318,
+    "itching": 0.31
+  },
+  "share_with_no_mapped_symptom": 0.271,
+  "results": {
+    "sex=female, age=as_recorded": {
+      "hybrid": {
+        "share_predicted_positive": 0.588,
+        "share_high_risk": 0.447,
+        "share_low_risk": 0.388,
+        "median_probability": 0.621
+      },
+      "random_forest": {
+        "share_predicted_positive": 0.694,
+        "share_high_risk": 0.6,
+        "share_low_risk": 0.282,
+        "median_probability": 0.727
+      },
+      "ann": {
+        "share_predicted_positive": 0.541,
+        "share_high_risk": 0.447,
+        "share_low_risk": 0.4,
+        "median_probability": 0.58
+      }
+    },
+    "sex=male, age=as_recorded": {
+      "hybrid": {
+        "share_predicted_positive": 0.412,
+        "share_high_risk": 0.318,
+        "share_low_risk": 0.541,
+        "median_probability": 0.287
+      },
+      "random_forest": {
+        "share_predicted_positive": 0.624,
+        "share_high_risk": 0.506,
+        "share_low_risk": 0.318,
+        "median_probability": 0.7
+      },
+      "ann": {
+        "share_predicted_positive": 0.4,
+        "share_high_risk": 0.318,
+        "share_low_risk": 0.565,
+        "median_probability": 0.115
+      }
+    },
+    "sex=female, age=clipped_to_16": {
+      "hybrid": {
+        "share_predicted_positive": 0.6,
+        "share_high_risk": 0.459,
+        "share_low_risk": 0.341,
+        "median_probability": 0.697
+      },
+      "random_forest": {
+        "share_predicted_positive": 0.694,
+        "share_high_risk": 0.6,
+        "share_low_risk": 0.282,
+        "median_probability": 0.727
+      },
+      "ann": {
+        "share_predicted_positive": 0.6,
+        "share_high_risk": 0.459,
+        "share_low_risk": 0.4,
+        "median_probability": 0.685
+      }
+    },
+    "sex=male, age=clipped_to_16": {
+      "hybrid": {
+        "share_predicted_positive": 0.424,
+        "share_high_risk": 0.329,
+        "share_low_risk": 0.459,
+        "median_probability": 0.302
+      },
+      "random_forest": {
+        "share_predicted_positive": 0.624,
+        "share_high_risk": 0.506,
+        "share_low_risk": 0.318,
+        "median_probability": 0.7
+      },
+      "ann": {
+        "share_predicted_positive": 0.424,
+        "share_high_risk": 0.329,
+        "share_low_risk": 0.565,
+        "median_probability": 0.172
+      }
+    }
+  },
+  "caveats": "* every cohort member has T1D, so only sensitivity (share flagged positive) can be\n    estimated; specificity cannot;\n  * symptoms were recorded around/after diagnosis (retrospective), not before it;\n  * only 5 of the 14 symptom questions exist in the cohort; the other 9 are set to\n    \"No\" (a conservative assumption that can only lower the score);\n  * sex is not recorded, so results are reported for both values;\n  * cohort ages (4-18) are mostly below the training range (16-90), so the\n    model is extrapolating; a sensitivity analysis clips age to 16."
+}

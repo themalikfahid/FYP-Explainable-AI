@@ -1,0 +1,11 @@
+
+ RUN  v4.1.11 /home/claude/fyp-xai-health/frontend
+
+ ✓ tests/components.test.tsx (12 tests) 521ms
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  16:24:44
+   Duration  1.74s (transform 221ms, setup 102ms, import 474ms, tests 521ms, environment 449ms)
+
+JUNIT report written to /home/claude/fyp-xai-health/artifacts/qa/junit_frontend.xml

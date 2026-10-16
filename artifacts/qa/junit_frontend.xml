@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="12" failures="0" errors="0" time="0.520894028">
+    <testsuite name="tests/components.test.tsx" timestamp="2026-10-15T11:24:45.799Z" hostname="vm" tests="12" failures="0" errors="0" skipped="0" time="0.520894028">
+        <testcase classname="tests/components.test.tsx" name="validation helpers &gt; validates required, numeric and ranges" time="0.0027768">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="validation helpers &gt; collects all errors" time="0.001667651">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="validation helpers &gt; maps lifestyle form values to API payload" time="0.00136598">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="validation helpers &gt; formats values using spec labels and units" time="0.000630271">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="Field &gt; renders yes/no as a radio group and reports changes" time="0.12077567">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="Field &gt; shows optional select with &apos;Not known&apos; and an accessible error" time="0.025427675">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="ShapLedger &gt; shows base and final probability and signed contributions in order" time="0.014012236">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="ShapLedger &gt; renders global importance bars" time="0.003164064">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="ShapLedger &gt; labels risk badges in words, not colour only" time="0.002695796">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="auth pages &gt; shows the server&apos;s error on failed login" time="0.129350076">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="auth pages &gt; logs in and navigates to the dashboard" time="0.103239602">
+        </testcase>
+        <testcase classname="tests/components.test.tsx" name="auth pages &gt; validates registration fields before calling the API" time="0.110764789">
+        </testcase>
+    </testsuite>
+</testsuites>

@@ -1,0 +1,258 @@
+{
+  "heart_uci": {
+    "rows": 920,
+    "rows_per_site": {
+      "cleveland": 303,
+      "hungarian": 294,
+      "va_long_beach": 200,
+      "switzerland": 123
+    },
+    "target_distribution_num": {
+      "0": 411,
+      "1": 196,
+      "2": 135,
+      "3": 135,
+      "4": 43
+    },
+    "target_by_site": {
+      "cleveland": {
+        "0": 164,
+        "1": 55,
+        "2": 36,
+        "3": 35,
+        "4": 13
+      },
+      "hungarian": {
+        "0": 188,
+        "1": 37,
+        "2": 26,
+        "3": 28,
+        "4": 15
+      },
+      "switzerland": {
+        "0": 8,
+        "1": 48,
+        "2": 32,
+        "3": 30,
+        "4": 5
+      },
+      "va_long_beach": {
+        "0": 51,
+        "1": 56,
+        "2": 41,
+        "3": 42,
+        "4": 10
+      }
+    },
+    "missing_raw": {
+      "trestbps": 59,
+      "chol": 30,
+      "fbs": 90,
+      "restecg": 2,
+      "thalach": 55,
+      "exang": 55,
+      "oldpeak": 62,
+      "slope": 309,
+      "ca": 610,
+      "thal": 486
+    },
+    "missing_by_site_pct": {
+      "cleveland": {
+        "slope": 0.0,
+        "ca": 1.3,
+        "thal": 0.7
+      },
+      "hungarian": {
+        "slope": 64.6,
+        "ca": 98.6,
+        "thal": 90.5
+      },
+      "switzerland": {
+        "slope": 13.8,
+        "ca": 95.9,
+        "thal": 42.3
+      },
+      "va_long_beach": {
+        "slope": 51.0,
+        "ca": 99.0,
+        "thal": 83.0
+      }
+    },
+    "zero_cholesterol_rows": 172,
+    "zero_cholesterol_by_site": {
+      "switzerland": 123,
+      "va_long_beach": 49
+    },
+    "zero_resting_bp_rows": 1,
+    "negative_oldpeak_rows": 12,
+    "exact_duplicate_rows": 2,
+    "hungarian_label_check": {
+      "processed_label_values": [
+        0,
+        1
+      ],
+      "raw_label_values": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "rows_matched_by_features": 293,
+      "crosstab_processed_rows_vs_raw_cols": {
+        "0": {
+          "0": 187,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0
+        },
+        "1": {
+          "0": 0,
+          "1": 37,
+          "2": 26,
+          "3": 28,
+          "4": 15
+        }
+      },
+      "conclusion": "processed 0 == raw 0 and processed 1 == raw 1..4 for every matched row; raw file used for training"
+    }
+  },
+  "early_stage_diabetes": {
+    "rows": 520,
+    "columns": [
+      "Age",
+      "Gender",
+      "Polyuria",
+      "Polydipsia",
+      "sudden weight loss",
+      "weakness",
+      "Polyphagia",
+      "Genital thrush",
+      "visual blurring",
+      "Itching",
+      "Irritability",
+      "delayed healing",
+      "partial paresis",
+      "muscle stiffness",
+      "Alopecia",
+      "Obesity",
+      "class"
+    ],
+    "target_distribution": {
+      "Positive": 320,
+      "Negative": 200
+    },
+    "exact_duplicate_rows": 269,
+    "rows_after_dedup": 251,
+    "target_after_dedup": {
+      "Positive": 173,
+      "Negative": 78
+    },
+    "feature_sets_with_conflicting_labels": 0,
+    "missing": {},
+    "age_range": [
+      16,
+      90
+    ],
+    "age_median": 47.5,
+    "gender_distribution": {
+      "Male": 328,
+      "Female": 192
+    },
+    "positive_rate_by_gender": {
+      "Female": 0.901,
+      "Male": 0.448
+    }
+  },
+  "t1d_cohort_deidentified": {
+    "available": true,
+    "rows": 85,
+    "columns_kept": [
+      "pseudo_id",
+      "age",
+      "weight",
+      "height",
+      "family_history",
+      "consanguinity",
+      "fasting_bg",
+      "hba1c",
+      "insulin_dose",
+      "urination",
+      "thirst",
+      "blurry_vision",
+      "joint_pain",
+      "loss_of_weight",
+      "body_itching",
+      "dizziness",
+      "blindness",
+      "hypertension",
+      "cardio_disease",
+      "congenital_hypothyroidism",
+      "liver_disease",
+      "kidney_disease",
+      "exocrine_pancreatic_disease",
+      "congenital_glaucoma",
+      "skeletal_disease",
+      "developmental_delay",
+      "facial_dysmorphism",
+      "onset_years"
+    ],
+    "label_note": "All rows are diagnosed T1D patients (insulin_dose=1 for 83/85). No non-diabetic controls.",
+    "age_range": [
+      4.0,
+      18.0
+    ],
+    "missing": {
+      "weight": 2,
+      "height": 2,
+      "consanguinity": 1,
+      "fasting_bg": 4,
+      "hba1c": 27,
+      "urination": 1,
+      "body_itching": 1,
+      "dizziness": 1,
+      "blindness": 1,
+      "hypertension": 1,
+      "onset_years": 7
+    },
+    "implausible_hba1c_gt_20": 1,
+    "hba1c_lt_4": 1,
+    "fasting_bg_lt_70": 6,
+    "duplicate_rows_excluding_id": 1,
+    "symptom_prevalence": {
+      "urination": 0.417,
+      "thirst": 0.565,
+      "blurry_vision": 0.318,
+      "loss_of_weight": 0.224,
+      "body_itching": 0.31
+    }
+  },
+  "cardio_kaggle": {
+    "available": true,
+    "rows": 70000,
+    "columns": [
+      "id",
+      "age",
+      "gender",
+      "height",
+      "weight",
+      "ap_hi",
+      "ap_lo",
+      "cholesterol",
+      "gluc",
+      "smoke",
+      "alco",
+      "active",
+      "cardio"
+    ],
+    "target_distribution": {
+      "0": 35021,
+      "1": 34979
+    },
+    "implausible_ap_hi_rows": 229,
+    "implausible_ap_lo_rows": 1012,
+    "ap_lo_gt_ap_hi_rows": 1234,
+    "duplicate_rows_excluding_id": 24
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "startup_seconds_incl_model_load": 0.32,
+  "login_bcrypt": {
+    "n": 10,
+    "median_ms": 323.6,
+    "p95_ms": 334.8,
+    "max_ms": 341.4
+  },
+  "predict_diabetes_with_shap": {
+    "n": 20,
+    "median_ms": 497.8,
+    "p95_ms": 570.1,
+    "max_ms": 683.2
+  },
+  "predict_heart_with_shap": {
+    "n": 20,
+    "median_ms": 586.1,
+    "p95_ms": 756.1,
+    "max_ms": 932.3
+  },
+  "model_only_heart_no_shap": {
+    "n": 50,
+    "median_ms": 63.8,
+    "p95_ms": 74.8,
+    "max_ms": 84.1
+  },
+  "model_only_diabetes_no_shap": {
+    "n": 50,
+    "median_ms": 48.9,
+    "p95_ms": 66.9,
+    "max_ms": 72.6
+  },
+  "pdf_report": {
+    "n": 20,
+    "median_ms": 35.2,
+    "p95_ms": 42.2,
+    "max_ms": 46.3
+  },
+  "history_list_50": {
+    "n": 50,
+    "median_ms": 10.1,
+    "p95_ms": 13.2,
+    "max_ms": 16.7
+  },
+  "prediction_detail": {
+    "n": 50,
+    "median_ms": 5.2,
+    "p95_ms": 6.6,
+    "max_ms": 7.4
+  },
+  "health": {
+    "n": 50,
+    "median_ms": 2.0,
+    "p95_ms": 2.4,
+    "max_ms": 3.4
+  },
+  "machine": {
+    "python": "3.13.16",
+    "platform": "Linux-6.18.44-fc-v114-x86_64-with-glibc2.39",
+    "cpus": 2
+  }
+}

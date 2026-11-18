@@ -29,7 +29,7 @@ class User(Base):
 class Prediction(Base):
     __tablename__ = "predictions"
     __table_args__ = (
-        CheckConstraint("disease IN ('diabetes','heart')", name="ck_prediction_disease"),
+        CheckConstraint("disease IN ('diabetes','heart','cad')", name="ck_prediction_disease"),
         CheckConstraint("risk_level IN ('low','moderate','high')", name="ck_prediction_risk"),
         CheckConstraint("risk_score >= 0 AND risk_score <= 1", name="ck_prediction_score"),
         Index("ix_predictions_user_created", "user_id", "created_at"),

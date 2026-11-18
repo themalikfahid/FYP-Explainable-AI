@@ -31,6 +31,16 @@ HEART_HIGH = {"age": 63, "sex": 1, "cp": 4, "trestbps": 150, "chol": 280, "fbs":
               "exang": 1, "oldpeak": 3.0, "slope": 2, "ca": 3, "thal": 7}
 HEART_LOW = {"age": 38, "sex": 0, "cp": 3, "trestbps": 115, "chol": 190, "fbs": 0, "restecg": 0, "thalach": 175,
              "exang": 0, "oldpeak": 0.0, "slope": 1, "ca": 0, "thal": 3}
+CAD_HIGH = {"age": 64, "sex": 1, "bmi": 29.0, "diabetes_hx": 1, "hypertension": 1, "current_smoker": 1,
+            "family_history": 1, "dyslipidemia": 1, "bp_systolic": 150, "pulse": 80, "typical_chest_pain": 1,
+            "atypical_chest_pain": 0, "nonanginal_pain": 0, "dyspnea": 1, "function_class": 2, "q_wave": 0,
+            "st_elevation": 0, "st_depression": 1, "t_inversion": 1, "lvh": 0, "fbs_mgdl": 150, "ldl": 160,
+            "hdl": 35, "triglycerides": 220, "esr": 30, "hemoglobin": 13.0, "ef_tte": 45}
+CAD_LOW = {"age": 38, "sex": 0, "bmi": 23.0, "diabetes_hx": 0, "hypertension": 0, "current_smoker": 0,
+           "family_history": 0, "dyslipidemia": 0, "bp_systolic": 115, "pulse": 72, "typical_chest_pain": 0,
+           "atypical_chest_pain": 0, "nonanginal_pain": 1, "dyspnea": 0, "function_class": 0, "q_wave": 0,
+           "st_elevation": 0, "st_depression": 0, "t_inversion": 0, "lvh": 0, "fbs_mgdl": 85, "ldl": 95,
+           "hdl": 55, "triglycerides": 110, "esr": 8, "hemoglobin": 14.0, "ef_tte": 60}
 LIFESTYLE = {"height_cm": 170, "weight_kg": 85, "sleep_hours": 6, "activity_minutes_week": 60,
              "fruit_veg_servings_day": 2, "smoking": "current", "alcohol_units_week": 0, "asian_bmi_cutoffs": False}
 

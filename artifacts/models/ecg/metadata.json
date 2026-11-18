@@ -1,0 +1,32 @@
+{
+  "trained_at_utc": "20261118T193552Z",
+  "classes": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "class_labels": {
+    "0": "Normal beat",
+    "1": "Supraventricular ectopic beat",
+    "2": "Ventricular ectopic beat",
+    "3": "Fusion beat",
+    "4": "Unclassifiable / paced beat"
+  },
+  "class_short": {
+    "0": "Normal",
+    "1": "Supraventricular",
+    "2": "Ventricular",
+    "3": "Fusion",
+    "4": "Unknown/paced"
+  },
+  "n_samples": 187,
+  "gate_threshold": 0.9,
+  "seed": 42,
+  "hybrid": "soft voting RF(150) + ANN(128,64), equal weights",
+  "versions": {
+    "python": "3.13.18",
+    "sklearn": "1.9.1"
+  }
+}

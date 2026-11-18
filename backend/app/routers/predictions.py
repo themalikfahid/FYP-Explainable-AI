@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 from backend.app.config import get_settings
 from backend.app.db import get_db, session_factory
 from backend.app.models import Prediction, User
-from backend.app.schemas import DiabetesRequest, HeartRequest, PredictionOut, PredictionSummary
+from backend.app.schemas import CadRequest, DiabetesRequest, HeartRequest, PredictionOut, PredictionSummary
 from backend.app.security import get_current_user, limiter
 from backend.app.services import email as email_service
 from backend.app.services.inference import ModelUnavailable
@@ -78,6 +78,12 @@ def predict_heart(body: HeartRequest, request: Request, bg: BackgroundTasks,
     return _run("heart", body, request, bg, user, db)
 
 
+@router.post("/predict/cad", response_model=PredictionOut)
+def predict_cad(body: CadRequest, request: Request, bg: BackgroundTasks,
+                user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return _run("cad", body, request, bg, user, db)
+
+
 def _owned(db: Session, user: User, pid: int) -> Prediction:
     p = db.get(Prediction, pid)
     if p is None or p.user_id != user.id:  # identical 404 for "missing" and "not yours"
@@ -86,7 +92,7 @@ def _owned(db: Session, user: User, pid: int) -> Prediction:
 
 
 @router.get("/predictions")
-def list_predictions(disease: Literal["diabetes", "heart"] | None = None,
+def list_predictions(disease: Literal["diabetes", "heart", "cad"] | None = None,
                      limit: int = Query(20, ge=1, le=100), offset: int = Query(0, ge=0),
                      user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     q = select(Prediction).where(Prediction.user_id == user.id)

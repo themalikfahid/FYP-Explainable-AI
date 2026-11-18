@@ -197,6 +197,46 @@ Deletes the record and its alert row. 404 if missing or not yours.
 `application/pdf`, `Content-Disposition: attachment; filename="health-report-<id>.pdf"`, `Cache-Control: no-store`.
 Built on request from the stored record (never cached on disk). 404 if missing or not yours.
 
+## Insights (all require auth; added in v2)
+
+### POST /api/assess/t1d
+Rule-based Type-1 clinical-pattern indicator (no ML; see KNOWN_LIMITATIONS). Body: `age` (1-100) plus 0/1 symptom flags
+(`polyuria, polydipsia, weight_loss, fatigue, blurred_vision, bedwetting, recurrent_infections, abdominal_pain_vomiting,
+fruity_breath_or_fast_breathing, family_history_t1d, other_autoimmune`), optional `symptom_weeks`, `bmi_category`,
+`fasting_glucose`, `random_glucose` (mg/dL), `hba1c` (%). Nothing is stored. Returns `score` 0-100, `band`
+(`low|possible|strong`), `contributions`, `lab_flags`, `meets_diagnostic_range`, `emergency_warning` (bool) with
+`emergency_signs`, `next_steps`, `cohort_comparison` and `limitations`.
+
+### POST /api/whatif/{diabetes|heart}
+Body `{features, changes}`. Re-runs the hybrid model with `changes` applied; nothing is saved. Returns `baseline`,
+`scenario`, `delta` and `per_change` (one-at-a-time sensitivity). Unknown features or out-of-range values are rejected.
+
+### GET /api/analytics/summary
+Per-user totals, `risk_distribution`, `latest` per disease with `trend`, time `series`, `recent` rows and `top_drivers`
+(top SHAP factors of the latest result per disease).
+
+### Confidence block
+Every prediction result now carries `confidence` = `{tier: confident|inconclusive|unrated, value, threshold,
+expected_accuracy_if_confident, coverage_at_threshold, overall_cv_accuracy, note}` and `model.cross_validated`
+(out-of-fold accuracy and the confident-subset accuracy). `GET /api/meta/models/{task}` returns the full
+`cross_validated` report including the accuracy/coverage table.
+
 ## Frontend routes served by the backend
 When `frontend/dist/index.html` exists, every non-`/api` path returns the single-page app (static files from
 `frontend/dist`, path traversal outside that folder is refused).
+
+
+## Coronary artery screen
+
+`POST /api/predict/cad` takes `{features, lifestyle?, save?}` like the other tasks. Required: age, sex, bmi, diabetes_hx,
+hypertension, current_smoker, family_history, dyslipidemia, bp_systolic, pulse, typical_chest_pain, atypical_chest_pain,
+nonanginal_pain, dyspnea, function_class (0-3), q_wave, st_elevation, st_depression, t_inversion, lvh. Optional:
+fbs_mgdl, ldl, hdl, triglycerides, esr, hemoglobin, ef_tte. `disease=cad` works in `GET /api/predictions`,
+`/api/whatif/cad` and `/api/meta/models/cad`.
+
+
+## ECG heartbeat classifier
+
+`POST /api/assess/ecg` with `{"beat": [187 floats scaled 0-1]}` returns the predicted class, class probabilities,
+confidence tier, abnormal probability and a 17-window occlusion saliency. Nothing is saved. `GET /api/meta/ecg` returns
+the test report and one real sample beat per class.

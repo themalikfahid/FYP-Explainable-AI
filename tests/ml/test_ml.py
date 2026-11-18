@@ -8,10 +8,10 @@ import pytest
 from sklearn.model_selection import train_test_split
 
 from ml import evaluate as ev
-from ml.data import DIABETES_FEATURES, HEART_FEATURES, TASKS, load_diabetes, load_heart
+from ml.data import DIABETES_FEATURES, HEART_FEATURES, TASKS, load_cad, load_diabetes, load_heart
 from ml.explain import HybridExplainer
 from ml.pipelines import SEED, build_ann, build_hybrid, build_rf, build_voting
-from tests.conftest import HEART_HIGH, HIGH_RISK_DIABETES, MODELS_DIR, require_models
+from tests.conftest import CAD_HIGH, HEART_HIGH, HIGH_RISK_DIABETES, MODELS_DIR, require_models
 
 
 # ------------------------------------------------------------------- data
@@ -88,7 +88,7 @@ def test_multiclass_metrics_any_disease():
 
 
 # ------------------------------------------------------------- artifacts
-@pytest.mark.parametrize("task", ["diabetes", "heart"])
+@pytest.mark.parametrize("task", ["diabetes", "heart", "cad"])
 def test_artifacts_reproduce_saved_test_predictions_and_metrics(task):
     """Serialised models reload and reproduce the stored test probabilities; the
     metrics in metadata.json are recomputable from those predictions."""
@@ -96,7 +96,7 @@ def test_artifacts_reproduce_saved_test_predictions_and_metrics(task):
     folder = MODELS_DIR / task
     meta = json.loads((folder / "metadata.json").read_text())
     assert meta["features"] == TASKS[task]["features"] and meta["classes"] == TASKS[task]["classes"]
-    X, y = (load_diabetes() if task == "diabetes" else load_heart()[:2])
+    X, y = {"diabetes": load_diabetes, "heart": lambda: load_heart()[:2], "cad": load_cad}[task]()
     _, X_te, _, y_te = train_test_split(X, y, test_size=0.2, stratify=y, random_state=SEED)
     saved = pd.read_csv(folder / "test_predictions.csv")
     assert (saved["y_true"].values == y_te.values).all()
@@ -112,7 +112,7 @@ def test_artifacts_reproduce_saved_test_predictions_and_metrics(task):
 
 def test_metadata_records_honest_protocol():
     require_models()
-    for task in ("diabetes", "heart"):
+    for task in ("diabetes", "heart", "cad"):
         meta = json.loads((MODELS_DIR / task / "metadata.json").read_text())
         assert meta["split"]["train"] + meta["split"]["test"] == meta["split"]["rows_after_dedup"]
         assert meta["fast_mode"] is False
@@ -121,7 +121,7 @@ def test_metadata_records_honest_protocol():
 
 
 # ------------------------------------------------------------------ SHAP
-@pytest.mark.parametrize("task,row", [("diabetes", HIGH_RISK_DIABETES), ("heart", HEART_HIGH)])
+@pytest.mark.parametrize("task,row", [("diabetes", HIGH_RISK_DIABETES), ("heart", HEART_HIGH), ("cad", CAD_HIGH)])
 def test_shap_explains_hybrid_output_additively(task, row):
     require_models()
     folder = MODELS_DIR / task
@@ -152,3 +152,12 @@ def test_shap_with_missing_optional_inputs():
     out = exp.explain_one(pd.DataFrame([row])[HEART_FEATURES].astype(float))
     assert out["additivity_error"] < 1e-6
     assert next(c for c in out["contributions"] if c["feature"] == "ca")["value"] is None
+
+
+def test_cad_loader_schema():
+    X, y = load_cad()
+    assert list(X.columns) == TASKS["cad"]["features"] and len(X) == len(y) == 303
+    assert X.isna().sum().sum() == 0 and set(y.unique()) == {0, 1}
+    for f, s in TASKS["cad"]["spec"].items():
+        if s["type"] == "number":
+            assert X[f].between(s["min"], s["max"]).all(), f

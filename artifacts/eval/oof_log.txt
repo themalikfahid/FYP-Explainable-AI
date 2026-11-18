@@ -1,0 +1,81 @@
+diabetes {
+ "overall": {
+  "accuracy": 0.900398406374502,
+  "balanced_accuracy": 0.8890247517415147,
+  "f1_macro": 0.8849404991106955,
+  "confusion_matrix": [
+   [
+    67,
+    11
+   ],
+   [
+    14,
+    159
+   ]
+  ],
+  "roc_auc": 0.9620572106121239
+ }
+}
+diabetes gate threshold 0.6 [{'min_confidence': 0.5, 'coverage': 1.0, 'accuracy': 0.900398406374502, 'n': 251}, {'min_confidence': 0.55, 'coverage': 0.9402390438247012, 'accuracy': 0.9194915254237288, 'n': 236}, {'min_confidence': 0.6, 'coverage': 0.8764940239043825, 'accuracy': 0.95, 'n': 220}, {'min_confidence': 0.65, 'coverage': 0.848605577689243, 'accuracy': 0.9530516431924883, 'n': 213}, {'min_confidence': 0.7, 'coverage': 0.8087649402390438, 'accuracy': 0.9704433497536946, 'n': 203}, {'min_confidence': 0.75, 'coverage': 0.7609561752988048, 'accuracy': 0.9738219895287958, 'n': 191}, {'min_confidence': 0.8, 'coverage': 0.6972111553784861, 'accuracy': 0.9771428571428571, 'n': 175}, {'min_confidence': 0.85, 'coverage': 0.5936254980079682, 'accuracy': 0.9798657718120806, 'n': 149}, {'min_confidence': 0.9, 'coverage': 0.4581673306772908, 'accuracy': 0.9826086956521739, 'n': 115}, {'min_confidence': 0.95, 'coverage': 0.3386454183266932, 'accuracy': 1.0, 'n': 85}]
+heart {
+ "overall": {
+  "accuracy": 0.5239651416122004,
+  "balanced_accuracy": 0.35076356922215945,
+  "f1_macro": 0.34987152084376094,
+  "confusion_matrix": [
+   [
+    336,
+    40,
+    17,
+    16,
+    1
+   ],
+   [
+    65,
+    75,
+    31,
+    23,
+    2
+   ],
+   [
+    25,
+    45,
+    26,
+    31,
+    7
+   ],
+   [
+    21,
+    38,
+    30,
+    42,
+    4
+   ],
+   [
+    6,
+    9,
+    14,
+    12,
+    2
+   ]
+  ]
+ },
+ "any_disease": {
+  "accuracy": 0.8104575163398693,
+  "balanced_accuracy": 0.8040378336854235,
+  "roc_auc": 0.8792154791626657,
+  "sensitivity": 0.8641732283464567,
+  "specificity": 0.7439024390243902,
+  "confusion_matrix": [
+   [
+    305,
+    105
+   ],
+   [
+    69,
+    439
+   ]
+  ]
+ }
+}
+heart gate threshold 0.85 [{'min_confidence': 0.5, 'coverage': 1.0, 'accuracy': 0.8104575163398693, 'n': 918}, {'min_confidence': 0.55, 'coverage': 0.94880174291939, 'accuracy': 0.8277841561423651, 'n': 871}, {'min_confidence': 0.6, 'coverage': 0.8932461873638344, 'accuracy': 0.8439024390243902, 'n': 820}, {'min_confidence': 0.65, 'coverage': 0.835511982570806, 'accuracy': 0.8565840938722294, 'n': 767}, {'min_confidence': 0.7, 'coverage': 0.7854030501089324, 'accuracy': 0.8668515950069348, 'n': 721}, {'min_confidence': 0.75, 'coverage': 0.7276688453159041, 'accuracy': 0.8832335329341318, 'n': 668}, {'min_confidence': 0.8, 'coverage': 0.6601307189542484, 'accuracy': 0.8844884488448845, 'n': 606}, {'min_confidence': 0.85, 'coverage': 0.5522875816993464, 'accuracy': 0.9092702169625246, 'n': 507}, {'min_confidence': 0.9, 'coverage': 0.42592592592592593, 'accuracy': 0.9309462915601023, 'n': 391}, {'min_confidence': 0.95, 'coverage': 0.23202614379084968, 'accuracy': 0.9342723004694836, 'n': 213}]

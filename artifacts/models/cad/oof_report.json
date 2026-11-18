@@ -1,0 +1,84 @@
+{
+  "task": "cad",
+  "n_records": 303,
+  "repeats": 3,
+  "folds": 5,
+  "target_accuracy": 0.95,
+  "overall": {
+    "accuracy": 0.8877887788778878,
+    "balanced_accuracy": 0.8457854406130267,
+    "f1_macro": 0.8578799249530957,
+    "confusion_matrix": [
+      [
+        65,
+        22
+      ],
+      [
+        12,
+        204
+      ]
+    ],
+    "roc_auc": 0.9187952320136229
+  },
+  "gate": {
+    "decision": "coronary artery disease screen (likely vs unlikely)",
+    "table": [
+      {
+        "min_confidence": 0.5,
+        "coverage": 1.0,
+        "accuracy": 0.8877887788778878,
+        "n": 303
+      },
+      {
+        "min_confidence": 0.55,
+        "coverage": 0.966996699669967,
+        "accuracy": 0.8907849829351536,
+        "n": 293
+      },
+      {
+        "min_confidence": 0.6,
+        "coverage": 0.9306930693069307,
+        "accuracy": 0.8900709219858156,
+        "n": 282
+      },
+      {
+        "min_confidence": 0.65,
+        "coverage": 0.9174917491749175,
+        "accuracy": 0.8920863309352518,
+        "n": 278
+      },
+      {
+        "min_confidence": 0.7,
+        "coverage": 0.8679867986798679,
+        "accuracy": 0.9011406844106464,
+        "n": 263
+      },
+      {
+        "min_confidence": 0.75,
+        "coverage": 0.8250825082508251,
+        "accuracy": 0.912,
+        "n": 250
+      },
+      {
+        "min_confidence": 0.8,
+        "coverage": 0.7161716171617162,
+        "accuracy": 0.9400921658986175,
+        "n": 217
+      },
+      {
+        "min_confidence": 0.85,
+        "coverage": 0.5874587458745875,
+        "accuracy": 0.9606741573033708,
+        "n": 178
+      },
+      {
+        "min_confidence": 0.9,
+        "coverage": 0.39933993399339934,
+        "accuracy": 0.9752066115702479,
+        "n": 121
+      }
+    ],
+    "threshold": 0.85
+  },
+  "seconds": 37.8
+}

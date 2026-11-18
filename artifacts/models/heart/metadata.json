@@ -1,7 +1,7 @@
 {
   "task": "heart",
   "title": "Multiclass heart disease classification (UCI angiographic grade 0-4)",
-  "trained_at_utc": "2026-10-15T10:49:54+00:00",
+  "trained_at_utc": "2026-11-18T18:15:42+00:00",
   "features": [
     "age",
     "sex",
@@ -929,19 +929,19 @@
     }
   },
   "versions": {
-    "python": "3.13.16",
+    "python": "3.13.18",
     "sklearn": "1.9.1",
-    "numpy": "2.5.4",
-    "pandas": "3.0.6"
+    "numpy": "2.5.3",
+    "pandas": "3.0.5"
   },
   "data_sha256": {
-    "data/raw/heart_uci/heart-disease.names": "ec7ed5aa4ed8321097808f47b836301c2a0c36f3bb09c40b8b43b622363e6b61",
-    "data/raw/heart_uci/hungarian.data": "b8e4bbd06b9bf9ec831c992ba397639f22815e525c43b489e1a6e75b3be29a75",
-    "data/raw/heart_uci/processed.cleveland.data": "a74b7efa387bc9d108d7d0115d831fe9b414b29ae7124f331b622b4efa0427c8",
-    "data/raw/heart_uci/processed.hungarian.data": "d1ad108f785768cd3d7e82dc522e6f5a61eea93cccfb3a46ee8076f73fc3d796",
-    "data/raw/heart_uci/processed.switzerland.data": "834a405ccf5b66ab4056bb77794adc8df0b7125186454c0a1d002d33c6c3b314",
-    "data/raw/heart_uci/processed.va.data": "e7c93d8d0d2acdadfa4c5e8de768e2191e7f618b952e29623f1f0d5949ff6b8f"
+    "data/raw/heart_uci/heart-disease.names": "02db618268cbe8b314137282a0a4cae6d5eb178b2e263fe94c64241f12ae4dc4",
+    "data/raw/heart_uci/hungarian.data": "da18bbf1e0c0c0ab0d6418e65edac54f76d52a1d155da4e532f441d0943ae732",
+    "data/raw/heart_uci/processed.cleveland.data": "13f2c7cc1ebfc284ead179a49d04ef4935ede24cff35452bf19a8eb643c7a8af",
+    "data/raw/heart_uci/processed.hungarian.data": "31134d83efc3266e486acece5e259585d7a52f16afa5567f195e70a993327afe",
+    "data/raw/heart_uci/processed.switzerland.data": "422aa0182e5b95ff4ef2d95512caf3335e114fc1816db477a5a30286b267c2d7",
+    "data/raw/heart_uci/processed.va.data": "1a12cdc1aa204bc5506aa22f04b6c45224b23f36adbd1c62039f65f370e334ea"
   },
   "fast_mode": false,
-  "train_seconds": 300.8
+  "train_seconds": 238.9
 }

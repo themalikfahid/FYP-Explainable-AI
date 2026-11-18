@@ -116,6 +116,38 @@ class HeartFeatures(BaseModel):
     thal: Literal[3, 6, 7] | None = None
 
 
+class CadFeatures(BaseModel):
+    """Coronary artery disease screening inputs (Z-Alizadeh Sani model). Lab/echo values are optional."""
+    model_config = ConfigDict(extra="forbid")
+    age: float = Field(ge=18, le=100, description="years")
+    sex: YesNo
+    bmi: float = Field(ge=12, le=60, description="kg/m2")
+    diabetes_hx: YesNo
+    hypertension: YesNo
+    current_smoker: YesNo
+    family_history: YesNo
+    dyslipidemia: YesNo
+    bp_systolic: float = Field(ge=70, le=250, description="mm Hg")
+    pulse: float = Field(ge=30, le=200, description="bpm")
+    typical_chest_pain: YesNo
+    atypical_chest_pain: YesNo
+    nonanginal_pain: YesNo
+    dyspnea: YesNo
+    function_class: Literal[0, 1, 2, 3]
+    q_wave: YesNo
+    st_elevation: YesNo
+    st_depression: YesNo
+    t_inversion: YesNo
+    lvh: YesNo
+    fbs_mgdl: float | None = Field(default=None, ge=40, le=600, description="mg/dL (optional)")
+    ldl: float | None = Field(default=None, ge=10, le=400, description="mg/dL (optional)")
+    hdl: float | None = Field(default=None, ge=10, le=150, description="mg/dL (optional)")
+    triglycerides: float | None = Field(default=None, ge=20, le=2000, description="mg/dL (optional)")
+    esr: float | None = Field(default=None, ge=0, le=150, description="mm/h (optional)")
+    hemoglobin: float | None = Field(default=None, ge=5, le=20, description="g/dL (optional)")
+    ef_tte: float | None = Field(default=None, ge=10, le=80, description="% (optional)")
+
+
 class LifestyleIn(BaseModel):
     """Optional lifestyle inputs used for BMI, lifestyle score and recommendations
     (NOT used by the ML models)."""
@@ -140,6 +172,13 @@ class DiabetesRequest(BaseModel):
 class HeartRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     features: HeartFeatures
+    lifestyle: LifestyleIn | None = None
+    save: bool = True
+
+
+class CadRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    features: CadFeatures
     lifestyle: LifestyleIn | None = None
     save: bool = True
 
@@ -174,3 +213,47 @@ class PredictionOut(BaseModel):
     result: dict
     model_version: str
     alert_status: str | None = None
+
+
+# ------------------------------------------------------------ extra modules
+class T1DIn(BaseModel):
+    """Inputs of the rule-based Type-1 pattern indicator (nothing here is stored)."""
+    model_config = ConfigDict(extra="forbid")
+    age: float = Field(ge=1, le=100)
+    polyuria: YesNo = 0
+    polydipsia: YesNo = 0
+    weight_loss: YesNo = 0
+    fatigue: YesNo = 0
+    blurred_vision: YesNo = 0
+    bedwetting: YesNo = 0
+    recurrent_infections: YesNo = 0
+    abdominal_pain_vomiting: YesNo = 0
+    fruity_breath_or_fast_breathing: YesNo = 0
+    symptom_weeks: float | None = Field(default=None, ge=0, le=520)
+    family_history_t1d: YesNo = 0
+    other_autoimmune: YesNo = 0
+    bmi_category: Literal["underweight", "normal", "overweight", "obese", "unknown"] = "unknown"
+    fasting_glucose: float | None = Field(default=None, ge=20, le=1000, description="mg/dL")
+    random_glucose: float | None = Field(default=None, ge=20, le=1000, description="mg/dL")
+    hba1c: float | None = Field(default=None, ge=3, le=20, description="percent")
+
+
+class EcgIn(BaseModel):
+    """One heartbeat: 187 samples scaled to 0-1 (MIT-BIH heartbeat format)."""
+    model_config = ConfigDict(extra="forbid")
+    beat: list[float] = Field(min_length=187, max_length=187)
+
+    @field_validator("beat")
+    @classmethod
+    def finite_in_range(cls, v: list[float]) -> list[float]:
+        import math
+        if any(not math.isfinite(x) or x < -0.5 or x > 1.5 for x in v):
+            raise ValueError("beat values must be finite numbers, scaled to roughly 0-1")
+        return v
+
+
+class WhatIfIn(BaseModel):
+    """Re-run a model with some inputs changed; nothing is saved."""
+    model_config = ConfigDict(extra="forbid")
+    features: dict[str, float | int | None]
+    changes: dict[str, float | int | None] = Field(default_factory=dict)

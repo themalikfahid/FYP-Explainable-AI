@@ -109,6 +109,6 @@
   "n_rows_explained": 120,
   "background_rows": 50,
   "max_additivity_error": 1.3322676295501878e-15,
-  "seconds": 61.9,
+  "seconds": 49.2,
   "method": "PermutationExplainer on hybrid predict_proba"
 }

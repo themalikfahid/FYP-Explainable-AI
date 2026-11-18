@@ -56,7 +56,7 @@ def model_info(task: str, request: Request):
                                   for k, v in meta["cv_train_repeated"].items()},
             "test_metrics": slim, "calibration": {k: v["calibration_table"] for k, v in meta["test_metrics"].items()},
             "risk_thresholds": meta["risk_thresholds"], "global_shap": m.global_shap,
-            "leave_one_site_out_hybrid": meta.get("leave_one_site_out_hybrid")}
+            "leave_one_site_out_hybrid": meta.get("leave_one_site_out_hybrid"), "cross_validated": m.oof}
 
 
 @router.post("/tools/bmi")

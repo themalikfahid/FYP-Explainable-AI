@@ -1,0 +1,354 @@
+{
+  "task": "ecg",
+  "dataset": "MIT-BIH Arrhythmia (Kaggle ECG Heartbeat Categorization)",
+  "n_train_fit": 38320,
+  "n_validation": 6763,
+  "n_test": 21892,
+  "test": {
+    "hybrid": {
+      "n": 21892,
+      "accuracy": 0.9761099945185456,
+      "balanced_accuracy": 0.8533128689513422,
+      "f1_macro": 0.8807793650015887,
+      "per_class": {
+        "0": {
+          "label": "Normal",
+          "precision": 0.9833041383840596,
+          "recall": 0.9914449718511977,
+          "f1": 0.9873577749683944,
+          "support": 18118
+        },
+        "1": {
+          "label": "Supraventricular",
+          "precision": 0.8429203539823009,
+          "recall": 0.685251798561151,
+          "f1": 0.7559523809523809,
+          "support": 556
+        },
+        "2": {
+          "label": "Ventricular",
+          "precision": 0.9438990182328191,
+          "recall": 0.9295580110497238,
+          "f1": 0.9366736256089074,
+          "support": 1448
+        },
+        "3": {
+          "label": "Fusion",
+          "precision": 0.8283582089552238,
+          "recall": 0.6851851851851852,
+          "f1": 0.75,
+          "support": 162
+        },
+        "4": {
+          "label": "Unknown/paced",
+          "precision": 0.9727047146401985,
+          "recall": 0.9751243781094527,
+          "f1": 0.9739130434782609,
+          "support": 1608
+        }
+      },
+      "confusion_matrix": [
+        [
+          17963,
+          65,
+          48,
+          6,
+          36
+        ],
+        [
+          167,
+          381,
+          7,
+          0,
+          1
+        ],
+        [
+          73,
+          5,
+          1346,
+          17,
+          7
+        ],
+        [
+          34,
+          0,
+          17,
+          111,
+          0
+        ],
+        [
+          31,
+          1,
+          8,
+          0,
+          1568
+        ]
+      ]
+    },
+    "random_forest": {
+      "n": 21892,
+      "accuracy": 0.9760186369450028,
+      "balanced_accuracy": 0.8361591785993104,
+      "f1_macro": 0.8837037309189274,
+      "per_class": {
+        "0": {
+          "label": "Normal",
+          "precision": 0.9772149158413163,
+          "recall": 0.9965779887404791,
+          "f1": 0.9868014756114223,
+          "support": 18118
+        },
+        "1": {
+          "label": "Supraventricular",
+          "precision": 0.9246753246753247,
+          "recall": 0.6402877697841727,
+          "f1": 0.7566418703506907,
+          "support": 556
+        },
+        "2": {
+          "label": "Ventricular",
+          "precision": 0.9675276752767528,
+          "recall": 0.9053867403314917,
+          "f1": 0.9354263289332858,
+          "support": 1448
+        },
+        "3": {
+          "label": "Fusion",
+          "precision": 0.8740157480314961,
+          "recall": 0.6851851851851852,
+          "f1": 0.7681660899653979,
+          "support": 162
+        },
+        "4": {
+          "label": "Unknown/paced",
+          "precision": 0.9903100775193798,
+          "recall": 0.9533582089552238,
+          "f1": 0.9714828897338403,
+          "support": 1608
+        }
+      },
+      "confusion_matrix": [
+        [
+          18056,
+          27,
+          24,
+          3,
+          8
+        ],
+        [
+          197,
+          356,
+          2,
+          0,
+          1
+        ],
+        [
+          116,
+          2,
+          1311,
+          13,
+          6
+        ],
+        [
+          36,
+          0,
+          15,
+          111,
+          0
+        ],
+        [
+          72,
+          0,
+          3,
+          0,
+          1533
+        ]
+      ]
+    },
+    "ann": {
+      "n": 21892,
+      "accuracy": 0.967522382605518,
+      "balanced_accuracy": 0.8565039291280337,
+      "f1_macro": 0.8530844876851603,
+      "per_class": {
+        "0": {
+          "label": "Normal",
+          "precision": 0.9847065994348091,
+          "recall": 0.9808477756926813,
+          "f1": 0.9827733996958385,
+          "support": 18118
+        },
+        "1": {
+          "label": "Supraventricular",
+          "precision": 0.6783216783216783,
+          "recall": 0.697841726618705,
+          "f1": 0.6879432624113475,
+          "support": 556
+        },
+        "2": {
+          "label": "Ventricular",
+          "precision": 0.9130732375085557,
+          "recall": 0.9212707182320442,
+          "f1": 0.9171536610519079,
+          "support": 1448
+        },
+        "3": {
+          "label": "Fusion",
+          "precision": 0.7215189873417721,
+          "recall": 0.7037037037037037,
+          "f1": 0.7125,
+          "support": 162
+        },
+        "4": {
+          "label": "Unknown/paced",
+          "precision": 0.9516324062877872,
+          "recall": 0.9788557213930348,
+          "f1": 0.9650521152667075,
+          "support": 1608
+        }
+      },
+      "confusion_matrix": [
+        [
+          17771,
+          173,
+          90,
+          18,
+          66
+        ],
+        [
+          155,
+          388,
+          8,
+          1,
+          4
+        ],
+        [
+          71,
+          8,
+          1334,
+          25,
+          10
+        ],
+        [
+          29,
+          0,
+          19,
+          114,
+          0
+        ],
+        [
+          21,
+          3,
+          10,
+          0,
+          1574
+        ]
+      ]
+    }
+  },
+  "abnormal_vs_normal": {
+    "accuracy": 0.977663073268774,
+    "sensitivity": 0.9276629570747218,
+    "specificity": 0.988078154321669
+  },
+  "gate": {
+    "decision": "heartbeat class",
+    "target_accuracy": 0.99,
+    "threshold": 0.9,
+    "validation_table": [
+      {
+        "min_confidence": 0.5,
+        "coverage": 0.9908324707969836,
+        "accuracy": 0.9683629309058349,
+        "n": 6701
+      },
+      {
+        "min_confidence": 0.6,
+        "coverage": 0.968948691409138,
+        "accuracy": 0.9768045170151076,
+        "n": 6553
+      },
+      {
+        "min_confidence": 0.7,
+        "coverage": 0.9424811474197842,
+        "accuracy": 0.9836837150925636,
+        "n": 6374
+      },
+      {
+        "min_confidence": 0.8,
+        "coverage": 0.9087682980925624,
+        "accuracy": 0.9892613081679141,
+        "n": 6146
+      },
+      {
+        "min_confidence": 0.9,
+        "coverage": 0.8207895904184533,
+        "accuracy": 0.9960367501351108,
+        "n": 5551
+      },
+      {
+        "min_confidence": 0.95,
+        "coverage": 0.706786928877717,
+        "accuracy": 0.9981171548117155,
+        "n": 4780
+      },
+      {
+        "min_confidence": 0.99,
+        "coverage": 0.4245157474493568,
+        "accuracy": 0.9996516893068618,
+        "n": 2871
+      }
+    ],
+    "test_table": [
+      {
+        "min_confidence": 0.5,
+        "coverage": 0.9924173213959437,
+        "accuracy": 0.9792874896437448,
+        "n": 21726
+      },
+      {
+        "min_confidence": 0.6,
+        "coverage": 0.9753791339302028,
+        "accuracy": 0.9860441155809488,
+        "n": 21353
+      },
+      {
+        "min_confidence": 0.7,
+        "coverage": 0.9540928192947196,
+        "accuracy": 0.9902331593814334,
+        "n": 20887
+      },
+      {
+        "min_confidence": 0.8,
+        "coverage": 0.9211127352457519,
+        "accuracy": 0.9939003223406894,
+        "n": 20165
+      },
+      {
+        "min_confidence": 0.9,
+        "coverage": 0.8367896948657043,
+        "accuracy": 0.9968884764452208,
+        "n": 18319
+      },
+      {
+        "min_confidence": 0.95,
+        "coverage": 0.7157865887082039,
+        "accuracy": 0.9986598596043395,
+        "n": 15670
+      },
+      {
+        "min_confidence": 0.99,
+        "coverage": 0.4023844326694683,
+        "accuracy": 1.0,
+        "n": 8809
+      }
+    ]
+  },
+  "class_distribution_test": {
+    "0": 18118,
+    "1": 556,
+    "2": 1448,
+    "3": 162,
+    "4": 1608
+  }
+}

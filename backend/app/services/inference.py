@@ -52,6 +52,8 @@ class TaskModel:
         self.explainer = HybridExplainer(self.hybrid, self.features, bg)
         self.global_shap = json.loads((folder / "global_shap.json").read_text()) \
             if (folder / "global_shap.json").exists() else None
+        oof_path = folder / "oof_report.json"
+        self.oof = json.loads(oof_path.read_text()) if oof_path.exists() else None
         self.version = f"{task}-hybrid-{self.meta['trained_at_utc']}"
         self.strategy = self.meta.get("hybrid_strategy", "stacking")
         if self.strategy == "stacking":
@@ -67,7 +69,7 @@ class TaskModel:
         return pd.DataFrame([row], columns=self.features).astype(float)
 
     def risk_score(self, proba: np.ndarray) -> float:
-        if self.task == "diabetes":
+        if self.task in ("diabetes", "cad"):
             return float(proba[self.classes.index(1)])
         return float(1.0 - proba[self.classes.index(0)])  # P(any disease grade 1-4)
 
@@ -78,6 +80,29 @@ class TaskModel:
         if score < th["low_below"]:
             return "low"
         return "moderate"
+
+    def confidence(self, p: np.ndarray, score: float) -> dict:
+        """Confidence gate: the model answers only when its confidence reaches the threshold at which the
+        cross-validated accuracy of confident predictions is >= 90% (see ml/oof_eval.py)."""
+        conf = float(max(p)) if self.task in ("diabetes", "cad") else float(max(score, 1.0 - score))
+        gate = (self.oof or {}).get("gate") or {}
+        thr = gate.get("threshold")
+        if thr is None:
+            return {"tier": "unrated", "value": conf, "note": "No cross-validated gate is available for this model."}
+        row = next((r for r in gate["table"] if abs(r["min_confidence"] - thr) < 1e-9), None)
+        tier = "confident" if conf >= thr else "inconclusive"
+        what = gate["decision"]
+        if tier == "confident":
+            note = (f"Confident result for {what}. In cross-validation, predictions at this confidence level or above "
+                    f"were correct {row['accuracy']:.0%} of the time (they cover {row['coverage']:.0%} of cases).")
+        else:
+            note = (f"Inconclusive: the model is not confident enough for {what} (confidence {conf:.0%}, "
+                    f"needs {thr:.0%}). Treat the score as a prompt for a clinical check, not as an answer.")
+        base = self.oof["any_disease"] if self.task == "heart" else self.oof["overall"]
+        return {"tier": tier, "value": conf, "threshold": thr, "decision": what,
+                "expected_accuracy_if_confident": row["accuracy"] if row else None,
+                "coverage_at_threshold": row["coverage"] if row else None,
+                "overall_cv_accuracy": base["accuracy"], "note": note}
 
     def predict(self, features: dict, explain: bool = True) -> dict:
         X = self._frame(features)
@@ -121,8 +146,10 @@ class TaskModel:
             "predicted_label": labels[str(pred_class)],
             "probabilities": {str(c): float(p[i]) for i, c in enumerate(self.classes)},
             "risk_score": score,
-            "risk_score_definition": ("estimated probability of a positive screen" if self.task == "diabetes"
-                                      else "estimated probability of any heart disease grade (1-4)"),
+            "risk_score_definition": {
+                "diabetes": "estimated probability of a positive screen",
+                "cad": "estimated probability of significant coronary artery disease (>=50% narrowing)",
+            }.get(self.task, "estimated probability of any heart disease grade (1-4)"),
             "risk_level": self.risk_level(score),
             "risk_thresholds": self.meta["risk_thresholds"],
             "components": {
@@ -134,8 +161,10 @@ class TaskModel:
                                  "were checked for calibration on a small held-out test set only "
                                  "(see Model information) and are not clinically validated risks."),
             "warnings": warnings,
+            "confidence": self.confidence(p, score),
             "model": {"version": self.version, "production_model": self.strategy_text,
-                      "test_metrics": _headline(self.meta)},
+                      "test_metrics": _headline(self.meta),
+                      "cross_validated": _oof_headline(self.oof, self.task)},
         }
         if explanation:
             label = labels[str(explanation["explained_class"])]
@@ -149,6 +178,18 @@ class TaskModel:
                 }
             out["explanation"] = explanation
         return out
+
+
+def _oof_headline(oof: dict | None, task: str) -> dict | None:
+    if not oof:
+        return None
+    base = oof["any_disease"] if task == "heart" else oof["overall"]
+    gate = oof.get("gate", {})
+    row = next((r for r in gate.get("table", []) if gate.get("threshold") is not None
+                and abs(r["min_confidence"] - gate["threshold"]) < 1e-9), None)
+    return {"cv_accuracy": base["accuracy"], "cv_balanced_accuracy": base["balanced_accuracy"],
+            "cv_roc_auc": base.get("roc_auc"), "gate_threshold": gate.get("threshold"),
+            "confident_accuracy": row["accuracy"] if row else None, "confident_coverage": row["coverage"] if row else None}
 
 
 def _headline(meta: dict) -> dict:

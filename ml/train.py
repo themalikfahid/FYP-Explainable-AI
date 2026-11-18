@@ -34,7 +34,7 @@ from sklearn.model_selection import (GridSearchCV, RepeatedStratifiedKFold, Stra
                                      cross_validate, train_test_split)
 
 from ml import evaluate as ev
-from ml.data import RAW, ROOT, TASKS, load_diabetes, load_heart
+from ml.data import RAW, ROOT, TASKS, load_cad, load_diabetes, load_heart
 from ml.explain import HybridExplainer, global_importance
 from ml.pipelines import (ANN_GRID, HYBRID_GRID, RF_GRID, SEED, VOTING_GRID, build_ann, build_hybrid, build_rf,
                           build_voting)
@@ -51,6 +51,9 @@ def _sha256(path) -> str:
 def load_task(task: str):
     if task == "diabetes":
         X, y = load_diabetes()
+        return X, y, None
+    if task == "cad":
+        X, y = load_cad()
         return X, y, None
     X, y, site = load_heart()
     return X, y, site
@@ -199,7 +202,8 @@ def run_task(task: str, fast: bool = False) -> dict:
         "versions": {"python": platform.python_version(), "sklearn": sklearn.__version__,
                      "numpy": np.__version__, "pandas": pd.__version__},
         "data_sha256": {str(p.relative_to(ROOT)): _sha256(p) for p in files if task in str(p) or
-                        (task == "diabetes" and "early_stage" in str(p)) or (task == "heart" and "heart_uci" in str(p))},
+                        (task == "diabetes" and "early_stage" in str(p)) or (task == "heart" and "heart_uci" in str(p)) or
+                        (task == "cad" and "z_alizadeh" in str(p))},
         "fast_mode": fast,
         "train_seconds": round(time.time() - t0, 1),
     }
@@ -224,10 +228,10 @@ def run_task(task: str, fast: bool = False) -> dict:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--task", choices=["diabetes", "heart", "all"], default="all")
+    ap.add_argument("--task", choices=["diabetes", "heart", "cad", "all"], default="all")
     ap.add_argument("--fast", action="store_true")
     a = ap.parse_args()
-    tasks = ["diabetes", "heart"] if a.task == "all" else [a.task]
+    tasks = ["diabetes", "heart", "cad"] if a.task == "all" else [a.task]
     for t in tasks:
         run_task(t, fast=a.fast)
 

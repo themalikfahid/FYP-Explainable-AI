@@ -18,7 +18,7 @@ from fastapi.staticfiles import StaticFiles
 
 from backend.app import db as dbmod
 from backend.app.config import Settings, get_settings
-from backend.app.routers import auth, meta, predictions
+from backend.app.routers import auth, insights, meta, predictions
 from backend.app.services.inference import Registry
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -39,7 +39,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         log.info("startup complete in %.2fs; models=%s", app.state.startup_seconds, app.state.registry.status())
         yield
 
-    app = FastAPI(title="XAI Health Screening API", version="1.0.0", lifespan=lifespan,
+    app = FastAPI(title="Clarity Screen API", version="2.0.0", lifespan=lifespan,
                   docs_url="/api/docs" if settings.APP_ENV != "production" else None,
                   openapi_url="/api/openapi.json" if settings.APP_ENV != "production" else None,
                   redoc_url=None)
@@ -57,8 +57,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         if not request.url.path.startswith("/api/docs"):
             response.headers.setdefault(
                 "Content-Security-Policy",
-                "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; "
-                "script-src 'self'; connect-src 'self'; frame-ancestors 'none'")
+                "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; "
+                "script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; connect-src 'self'; frame-ancestors 'none'")
         if request.url.path.startswith("/api/"):
             response.headers.setdefault("Cache-Control", "no-store")
         return response
@@ -78,6 +78,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(meta.router)
     app.include_router(auth.router)
     app.include_router(predictions.router)
+    app.include_router(insights.router)
 
     dist = Path(settings.FRONTEND_DIST)
     if (dist / "index.html").exists():

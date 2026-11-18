@@ -1,0 +1,199 @@
+{
+  "task": "heart",
+  "n_records": 918,
+  "repeats": 3,
+  "folds": 5,
+  "target_accuracy": 0.9,
+  "overall": {
+    "accuracy": 0.5239651416122004,
+    "balanced_accuracy": 0.35076356922215945,
+    "f1_macro": 0.34987152084376094,
+    "confusion_matrix": [
+      [
+        336,
+        40,
+        17,
+        16,
+        1
+      ],
+      [
+        65,
+        75,
+        31,
+        23,
+        2
+      ],
+      [
+        25,
+        45,
+        26,
+        31,
+        7
+      ],
+      [
+        21,
+        38,
+        30,
+        42,
+        4
+      ],
+      [
+        6,
+        9,
+        14,
+        12,
+        2
+      ]
+    ]
+  },
+  "any_disease": {
+    "accuracy": 0.8104575163398693,
+    "balanced_accuracy": 0.8040378336854235,
+    "roc_auc": 0.8792154791626657,
+    "sensitivity": 0.8641732283464567,
+    "specificity": 0.7439024390243902,
+    "confusion_matrix": [
+      [
+        305,
+        105
+      ],
+      [
+        69,
+        439
+      ]
+    ]
+  },
+  "gate": {
+    "decision": "any heart disease (grades 1-4) vs none",
+    "table": [
+      {
+        "min_confidence": 0.5,
+        "coverage": 1.0,
+        "accuracy": 0.8104575163398693,
+        "n": 918
+      },
+      {
+        "min_confidence": 0.55,
+        "coverage": 0.94880174291939,
+        "accuracy": 0.8277841561423651,
+        "n": 871
+      },
+      {
+        "min_confidence": 0.6,
+        "coverage": 0.8932461873638344,
+        "accuracy": 0.8439024390243902,
+        "n": 820
+      },
+      {
+        "min_confidence": 0.65,
+        "coverage": 0.835511982570806,
+        "accuracy": 0.8565840938722294,
+        "n": 767
+      },
+      {
+        "min_confidence": 0.7,
+        "coverage": 0.7854030501089324,
+        "accuracy": 0.8668515950069348,
+        "n": 721
+      },
+      {
+        "min_confidence": 0.75,
+        "coverage": 0.7276688453159041,
+        "accuracy": 0.8832335329341318,
+        "n": 668
+      },
+      {
+        "min_confidence": 0.8,
+        "coverage": 0.6601307189542484,
+        "accuracy": 0.8844884488448845,
+        "n": 606
+      },
+      {
+        "min_confidence": 0.85,
+        "coverage": 0.5522875816993464,
+        "accuracy": 0.9092702169625246,
+        "n": 507
+      },
+      {
+        "min_confidence": 0.9,
+        "coverage": 0.42592592592592593,
+        "accuracy": 0.9309462915601023,
+        "n": 391
+      },
+      {
+        "min_confidence": 0.95,
+        "coverage": 0.23202614379084968,
+        "accuracy": 0.9342723004694836,
+        "n": 213
+      }
+    ],
+    "threshold": 0.85
+  },
+  "gate_grade": {
+    "decision": "exact disease grade 0-4",
+    "table": [
+      {
+        "min_confidence": 0.5,
+        "coverage": 0.5392156862745098,
+        "accuracy": 0.696969696969697,
+        "n": 495
+      },
+      {
+        "min_confidence": 0.55,
+        "coverage": 0.46296296296296297,
+        "accuracy": 0.7505882352941177,
+        "n": 425
+      },
+      {
+        "min_confidence": 0.6,
+        "coverage": 0.39651416122004357,
+        "accuracy": 0.7994505494505495,
+        "n": 364
+      },
+      {
+        "min_confidence": 0.65,
+        "coverage": 0.3431372549019608,
+        "accuracy": 0.8412698412698413,
+        "n": 315
+      },
+      {
+        "min_confidence": 0.7,
+        "coverage": 0.3082788671023965,
+        "accuracy": 0.872791519434629,
+        "n": 283
+      },
+      {
+        "min_confidence": 0.75,
+        "coverage": 0.28104575163398693,
+        "accuracy": 0.9031007751937985,
+        "n": 258
+      },
+      {
+        "min_confidence": 0.8,
+        "coverage": 0.2440087145969499,
+        "accuracy": 0.9107142857142857,
+        "n": 224
+      },
+      {
+        "min_confidence": 0.85,
+        "coverage": 0.19825708061002179,
+        "accuracy": 0.9285714285714286,
+        "n": 182
+      },
+      {
+        "min_confidence": 0.9,
+        "coverage": 0.1328976034858388,
+        "accuracy": 0.9672131147540983,
+        "n": 122
+      },
+      {
+        "min_confidence": 0.95,
+        "coverage": 0.06318082788671024,
+        "accuracy": 1.0,
+        "n": 58
+      }
+    ],
+    "threshold": 0.75
+  },
+  "seconds": 9.2
+}

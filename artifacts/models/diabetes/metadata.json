@@ -1,7 +1,7 @@
 {
   "task": "diabetes",
   "title": "Diabetes symptom-based risk screening (type not specified by the data)",
-  "trained_at_utc": "2026-10-15T10:44:52+00:00",
+  "trained_at_utc": "2026-11-18T18:11:43+00:00",
   "features": [
     "age",
     "gender_male",
@@ -690,14 +690,14 @@
     }
   },
   "versions": {
-    "python": "3.13.16",
+    "python": "3.13.18",
     "sklearn": "1.9.1",
-    "numpy": "2.5.4",
-    "pandas": "3.0.6"
+    "numpy": "2.5.3",
+    "pandas": "3.0.5"
   },
   "data_sha256": {
     "data/raw/early_stage_diabetes/diabetes_data_upload.csv": "7889d9d0beb7dd1ccc58da99f72763f16afb259b5dbbaa086f8195366ff66137"
   },
   "fast_mode": false,
-  "train_seconds": 173.5
+  "train_seconds": 131.2
 }

@@ -3,14 +3,14 @@ import shutil
 
 import pytest
 
-from tests.conftest import (HEART_HIGH, HEART_LOW, HIGH_RISK_DIABETES, LIFESTYLE, LOW_RISK_DIABETES, MODELS_DIR,
+from tests.conftest import (CAD_HIGH, CAD_LOW, HEART_HIGH, HEART_LOW, HIGH_RISK_DIABETES, LIFESTYLE, LOW_RISK_DIABETES, MODELS_DIR,
                             register_and_login)
 
 
 # ------------------------------------------------------------- health/meta
 def test_health_and_meta(client):
     h = client.get("/api/health").json()
-    assert h["status"] == "ok" and h["models"] == {"diabetes": "loaded", "heart": "loaded"}
+    assert h["status"] == "ok" and h["models"] == {"diabetes": "loaded", "heart": "loaded", "cad": "loaded"}
     f = client.get("/api/meta/features").json()
     assert f["heart"]["features"][0] == "age" and "disclaimer" in f
     m = client.get("/api/meta/models/heart").json()
@@ -301,3 +301,38 @@ def test_timestamps_are_utc_aware(client, auth):
                client.get(f"/api/predictions/{p['id']}", headers=auth).json()["created_at"],
                client.get("/api/auth/me", headers=auth).json()["created_at"]):
         assert ts.endswith("Z") or ts.endswith("+00:00"), ts
+
+
+def test_predict_cad_high_vs_low_and_optional_labs(client, auth):
+    hi = client.post("/api/predict/cad", json={"features": CAD_HIGH}, headers=auth)
+    lo = client.post("/api/predict/cad", json={"features": CAD_LOW}, headers=auth)
+    assert hi.status_code == 200 and lo.status_code == 200, hi.text + lo.text
+    h, l = hi.json(), lo.json()
+    assert h["disease"] == "cad" and h["risk_score"] > l["risk_score"]
+    assert h["risk_level"] in ("moderate", "high") and l["risk_level"] in ("low", "moderate")
+    assert h["result"]["explanation"]["contributions"] and h["result"]["recommendations"]["items"]
+    no_labs = {k: v for k, v in CAD_HIGH.items() if k not in ("ldl", "hdl", "triglycerides", "esr", "hemoglobin", "ef_tte", "fbs_mgdl")}
+    r = client.post("/api/predict/cad", json={"features": no_labs}, headers=auth)
+    assert r.status_code == 200 and r.json()["result"]["warnings"]
+    assert client.post("/api/predict/cad", json={"features": {**CAD_HIGH, "function_class": 5}}, headers=auth).status_code == 422
+    assert client.get("/api/predictions?disease=cad", headers=auth).json()["total"] == 3
+    pid = h["id"]
+    pdf = client.get(f"/api/predictions/{pid}/report.pdf", headers=auth)
+    assert pdf.status_code == 200 and pdf.content.startswith(b"%PDF")
+
+
+def test_ecg_beat_classifier(client, auth):
+    import json
+    from tests.conftest import MODELS_DIR
+    samples = json.loads((MODELS_DIR / "ecg" / "samples.json").read_text())
+    assert client.post("/api/assess/ecg", json={"beat": samples["0"]["beat"]}).status_code == 401
+    for cls in ("0", "2", "4"):
+        r = client.post("/api/assess/ecg", json={"beat": samples[cls]["beat"]}, headers=auth)
+        assert r.status_code == 200, r.text
+        j = r.json()
+        assert j["predicted_class"] == int(cls) and j["confidence"]["tier"] == "confident"
+        assert abs(sum(j["probabilities"].values()) - 1) < 1e-6 and len(j["saliency"]) == 17
+    assert client.post("/api/assess/ecg", json={"beat": [0.5] * 10}, headers=auth).status_code == 422
+    assert client.post("/api/assess/ecg", json={"beat": [9.0] * 187}, headers=auth).status_code == 422
+    info = client.get("/api/meta/ecg", headers=auth).json()
+    assert info["report"]["test"]["hybrid"]["accuracy"] > 0.95 and len(info["samples"]) == 5

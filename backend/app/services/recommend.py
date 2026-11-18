@@ -20,6 +20,7 @@ SOURCES = {
     "diabetes_uk_4t": "Diabetes UK '4Ts' type 1 diabetes symptom awareness guidance",
     "aha_warning": "American Heart Association, Warning Signs of a Heart Attack",
     "acc_aha_prev": "ACC/AHA Guideline on the Primary Prevention of Cardiovascular Disease (2019)",
+    "acc_aha_chest_pain": "AHA/ACC Guideline for the Evaluation and Diagnosis of Chest Pain (2021)",
     "acc_aha_bp": "ACC/AHA High Blood Pressure Guideline (2017)",
     "ncep": "NCEP ATP III cholesterol classification",
     "uk_cmo_alcohol": "UK Chief Medical Officers' low-risk drinking guidelines (2016)",
@@ -119,6 +120,44 @@ def heart_rules(f: dict, risk: str, top: list[str]) -> list[dict]:
     return r
 
 
+def cad_rules(f: dict, risk: str, top: list[str]) -> list[dict]:
+    r = []
+    if risk == "high":
+        r.append(_rec("follow_up", "high",
+                      "The screen suggests coronary artery disease is likely. See a doctor (ideally a cardiologist) "
+                      "soon for an ECG, stress test or imaging. Only angiography or CT can confirm it.",
+                      "risk_level == high", "acc_aha_chest_pain"))
+    elif risk == "moderate":
+        r.append(_rec("follow_up", "medium",
+                      "The result is in the uncertain range. A doctor visit with an ECG and a lipid profile would "
+                      "clarify your heart risk.", "risk_level == moderate", "acc_aha_chest_pain"))
+    else:
+        r.append(_rec("follow_up", "low",
+                      "The screen did not suggest significant coronary disease. Keep up regular check-ups, and "
+                      "report any new chest pain or breathlessness.", "risk_level == low", "acc_aha_chest_pain"))
+    if f.get("typical_chest_pain") or f.get("function_class", 0) >= 2:
+        r.append(_rec("emergency", "high",
+                      "Chest pain on effort or marked breathlessness needs medical assessment. Call emergency "
+                      "services if pain is severe, spreads to the arm or jaw, or lasts more than a few minutes.",
+                      "typical_chest_pain or function_class >= 2", "acc_aha_chest_pain"))
+    if f.get("current_smoker"):
+        r.append(_rec("risk_mitigation", "high", "Stopping smoking is the single most effective step for heart health. "
+                      "Ask a doctor or quit-line for support.", "current_smoker == 1", "who_tobacco"))
+    if f.get("bp_systolic") is not None and f["bp_systolic"] >= 130:
+        r.append(_rec("risk_mitigation", "medium",
+                      f"Your systolic blood pressure ({f['bp_systolic']:g} mm Hg) is at or above 130. Have it "
+                      "re-measured on separate days.", "bp_systolic >= 130", "acc_aha_bp"))
+    if f.get("ldl") is not None and f["ldl"] >= 130:
+        r.append(_rec("follow_up", "medium", f"Your LDL cholesterol ({f['ldl']:g} mg/dL) is above 130. Ask a doctor "
+                      "about a full lipid profile and treatment options.", "ldl >= 130", "ncep"))
+    if f.get("fbs_mgdl") is not None and f["fbs_mgdl"] >= 126:
+        r.append(_rec("follow_up", "medium", "Fasting glucose of 126 mg/dL or more should be followed up with a "
+                      "doctor (possible diabetes).", "fbs_mgdl >= 126", "ada"))
+    r.append(_rec("diet", "medium", "Eat less salt and saturated fat and more vegetables, fruit, whole grains and "
+                  "pulses.", "cad task (always)", "who_diet"))
+    return r
+
+
 def lifestyle_rules(ls: dict) -> tuple[list[dict], dict, dict]:
     r = []
     score = lifestyle_score(ls["sleep_hours"], ls["activity_minutes_week"], ls["fruit_veg_servings_day"],
@@ -168,7 +207,8 @@ PRIORITY_ORDER = {"high": 0, "medium": 1, "low": 2}
 def recommend(disease: str, features: dict, risk_level: str, explanation: dict | None,
               lifestyle: dict | None) -> dict:
     top = _top_positive(explanation)
-    recs = diabetes_rules(features, risk_level, top) if disease == "diabetes" else heart_rules(features, risk_level, top)
+    rules = {"diabetes": diabetes_rules, "heart": heart_rules, "cad": cad_rules}[disease]
+    recs = rules(features, risk_level, top)
     score = bmi = None
     if lifestyle:
         extra, score, bmi = lifestyle_rules(lifestyle)

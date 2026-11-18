@@ -1,90 +1,57 @@
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { api, ApiError, setToken } from "../api";
-import { useAuth } from "../auth";
+import { KeyRound, LogOut, Trash2, UserCog } from "lucide-react";
+import { Alert, Button, Card, Field, PageHead, ToggleCard, usePageTitle, useToast } from "../components/ui";
+import { api, ApiError, setToken } from "../lib/api";
+import { useAuth } from "../lib/auth";
 
 export default function Settings() {
-  const { user, setUser } = useAuth();
-  const nav = useNavigate();
-  const [name, setName] = useState(user?.full_name ?? "");
-  const [msg, setMsg] = useState<{ kind: "info" | "error"; text: string } | null>(null);
-  const [pw, setPw] = useState({ current: "", next: "" });
-  const [delPw, setDelPw] = useState("");
+  usePageTitle("Settings");
+  const { user, setUser, logout } = useAuth(); const toast = useToast(); const nav = useNavigate();
+  const [name, setName] = useState(user?.full_name ?? ""); const [alerts, setAlerts] = useState(!!user?.email_alerts_enabled);
+  const [cur, setCur] = useState(""); const [nw, setNw] = useState(""); const [pwErr, setPwErr] = useState("");
+  const [delPw, setDelPw] = useState(""); const [delErr, setDelErr] = useState("");
+  const em = (x: unknown) => x instanceof ApiError ? (x.fieldErrors.map((f) => f.message).join(" · ") || x.message) : "Request failed.";
 
-  const fail = (e: unknown) => setMsg({ kind: "error", text: e instanceof ApiError ? e.message : "Something went wrong." });
-
-  async function saveProfile(e: FormEvent) {
-    e.preventDefault();
-    if (!name.trim()) { setMsg({ kind: "error", text: "Name can't be empty." }); return; }
-    try { setUser(await api.updateMe({ full_name: name.trim() })); setMsg({ kind: "info", text: "Name saved." }); } catch (e) { fail(e); }
-  }
-  async function toggleAlerts() {
-    try {
-      const u = await api.updateMe({ email_alerts_enabled: !user!.email_alerts_enabled });
-      setUser(u);
-      setMsg({ kind: "info", text: u.email_alerts_enabled ? "High-risk email alerts turned on." : "High-risk email alerts turned off." });
-    } catch (e) { fail(e); }
-  }
-  async function changePw(e: FormEvent) {
-    e.preventDefault();
-    if (pw.next.length < 8 || !/[A-Za-z]/.test(pw.next) || !/\d/.test(pw.next)) {
-      setMsg({ kind: "error", text: "New password needs 8+ characters with a letter and a number." }); return;
-    }
-    try {
-      await api.changePassword(pw.current, pw.next);
-      setToken(null); setUser(null);
-      nav("/login", { state: { message: "Password changed. Log in with your new password." } });
-    } catch (e) { fail(e); }
-  }
-  async function deleteAccount(e: FormEvent) {
-    e.preventDefault();
-    if (!window.confirm("Delete your account and every saved assessment permanently?")) return;
-    try {
-      await api.deleteAccount(delPw);
-      setToken(null); setUser(null);
-      nav("/", { replace: true });
-    } catch (e) { fail(e); }
+  async function saveProfile(e: FormEvent) { e.preventDefault(); try { setUser(await api.updateMe({ full_name: name, email_alerts_enabled: alerts })); toast("Profile saved", "ok"); } catch (x) { toast(em(x), "error"); } }
+  async function changePw(e: FormEvent) { e.preventDefault(); setPwErr(""); try { await api.changePassword(cur, nw); setCur(""); setNw(""); toast("Password changed", "ok"); } catch (x) { setPwErr(em(x)); } }
+  async function del() {
+    setDelErr("");
+    if (!window.confirm("Permanently delete your account and all assessments?")) return;
+    try { await api.deleteAccount(delPw); setToken(null); setUser(null); nav("/"); } catch (x) { setDelErr(em(x)); }
   }
 
-  if (!user) return null;
   return (
-    <div className="page narrow">
-      <h1>Account</h1>
-      {msg && <p className={`banner ${msg.kind}`} role={msg.kind === "error" ? "alert" : "status"}>{msg.text}</p>}
-      <section className="panel">
-        <h2>Profile</h2>
-        <form onSubmit={saveProfile} className="row-form">
-          <div className="field"><label htmlFor="name">Full name</label>
-            <input id="name" value={name} maxLength={100} onChange={(e) => setName(e.target.value)} /></div>
-          <div className="field"><label htmlFor="em">Email</label><input id="em" value={user.email} disabled /></div>
-          <button className="btn">Save name</button>
-        </form>
-      </section>
-      <section className="panel">
-        <h2>Email alerts</h2>
-        <p>When an assessment is rated high risk, we can email you a short note asking you to sign in. The email never contains your results.</p>
-        <label className="check-line"><input type="checkbox" checked={user.email_alerts_enabled} onChange={toggleAlerts} />
-          Send me high-risk alerts</label>
-      </section>
-      <section className="panel">
-        <h2>Change password</h2>
-        <form onSubmit={changePw} className="row-form">
-          <div className="field"><label htmlFor="cur">Current password</label>
-            <input id="cur" type="password" autoComplete="current-password" value={pw.current} onChange={(e) => setPw({ ...pw, current: e.target.value })} /></div>
-          <div className="field"><label htmlFor="new">New password</label>
-            <input id="new" type="password" autoComplete="new-password" value={pw.next} onChange={(e) => setPw({ ...pw, next: e.target.value })} /></div>
-          <button className="btn">Change password</button>
-        </form>
-      </section>
-      <section className="panel danger-zone">
-        <h2>Delete account</h2>
-        <p>This permanently removes your account, all saved assessments and reports.</p>
-        <form onSubmit={deleteAccount} className="row-form">
-          <div className="field"><label htmlFor="delpw">Confirm with your password</label>
-            <input id="delpw" type="password" autoComplete="current-password" value={delPw} onChange={(e) => setDelPw(e.target.value)} /></div>
-          <button className="btn danger" disabled={!delPw}>Delete my account</button>
-        </form>
-      </section>
-    </div>
+    <>
+      <PageHead title="Settings" subtitle={user?.email} actions={<Button icon={<LogOut size={16} />} onClick={async () => { await logout(); nav("/"); }}>Sign out</Button>} />
+      <div className="grid cols-2" style={{ alignItems: "start" }}>
+        <Card large>
+          <h3><UserCog size={18} color="#22d3ee" /> Profile</h3>
+          <form className="stack" onSubmit={saveProfile}>
+            <Field label="Full name" htmlFor="s-n"><input id="s-n" className="input" value={name} onChange={(e) => setName(e.target.value)} required minLength={2} /></Field>
+            <ToggleCard title="High-risk email alerts" help="Get an email (without health values) after a high-risk result" on={alerts} onClick={() => setAlerts(!alerts)} />
+            <Button variant="primary" type="submit">Save changes</Button>
+          </form>
+        </Card>
+        <Card large>
+          <h3><KeyRound size={18} color="#a78bfa" /> Change password</h3>
+          <form className="stack" onSubmit={changePw}>
+            {pwErr && <Alert tone="error">{pwErr}</Alert>}
+            <Field label="Current password" htmlFor="s-c"><input id="s-c" className="input" type="password" autoComplete="current-password" value={cur} onChange={(e) => setCur(e.target.value)} required /></Field>
+            <Field label="New password" htmlFor="s-p" hint="At least 8 characters with a letter and a number."><input id="s-p" className="input" type="password" autoComplete="new-password" value={nw} onChange={(e) => setNw(e.target.value)} required /></Field>
+            <Button type="submit">Update password</Button>
+          </form>
+        </Card>
+        <Card large style={{ borderColor: "rgba(251,113,133,.35)" }}>
+          <h3><Trash2 size={18} color="#fb7185" /> Delete account</h3>
+          <p style={{ fontSize: 14 }}>Removes your account and every saved assessment. This cannot be undone.</p>
+          <div className="stack">
+            {delErr && <Alert tone="error">{delErr}</Alert>}
+            <Field label="Confirm with your password" htmlFor="s-d"><input id="s-d" className="input" type="password" autoComplete="current-password" value={delPw} onChange={(e) => setDelPw(e.target.value)} /></Field>
+            <Button variant="danger" disabled={!delPw} onClick={del}>Delete my account</Button>
+          </div>
+        </Card>
+      </div>
+    </>
   );
 }

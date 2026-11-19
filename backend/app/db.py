@@ -26,7 +26,11 @@ def configure(url: str) -> Engine:
         path = url.replace("sqlite:///", "", 1)
         if path and path != ":memory:":
             Path(path).parent.mkdir(parents=True, exist_ok=True)
-    _engine = create_engine(url, connect_args=connect_args, future=True)
+    engine_kwargs = {}
+    if not url.startswith("sqlite"):
+        # hosted Postgres (Neon) drops idle SSL connections; test them before use and recycle often
+        engine_kwargs.update(pool_pre_ping=True, pool_recycle=240)
+    _engine = create_engine(url, connect_args=connect_args, future=True, **engine_kwargs)
     if url.startswith("sqlite"):
         @event.listens_for(_engine, "connect")
         def _fk_on(dbapi_conn, _):  # enforce foreign keys / cascades in SQLite

@@ -42,6 +42,16 @@ class Settings(BaseSettings):
     APP_PUBLIC_URL: str = "http://localhost:8000"
 
     @model_validator(mode="after")
+    def _normalise_db_url(self):
+        # hosted Postgres (Neon, Render, Heroku) gives postgres:// or postgresql:// URLs; SQLAlchemy needs a driver
+        u = self.DATABASE_URL
+        for old in ("postgres://", "postgresql://", "postgresql+psycopg://"):
+            if u.startswith(old):
+                object.__setattr__(self, "DATABASE_URL", "postgresql+psycopg2://" + u[len(old):])
+                break
+        return self
+
+    @model_validator(mode="after")
     def _check_secret(self):
         if self.SECRET_KEY.startswith("change-me"):
             if self.APP_ENV == "production":
